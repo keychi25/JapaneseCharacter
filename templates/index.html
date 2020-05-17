@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-10">
+    <h3>メニュー</h3>
+    <form action="/run" method="post" enctype="multipart/form-data">
+      <div class="form-group col-md-6">
+        <label for="hiraga">書いたひらがなの文字</label>
+        <input type="text" class="form-control" name="hiragana" id="hiragana" placeholder="ひらがなを1文字入力してください"
+          data-required-error="ひらがなの入力は必須です" maxlength="1" required>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="image">ひらがなの写真</label>
+        <input type="file" name="image" id="image" required>
+      </div>
+      <div class="form-group col-md-6">
+        <input type="submit" class="btn-primary" value="確認する">
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+  <meta charset="UTF-8">
+  {% if title %}
+  <title> {{ title }} </title>
+  {% else %}
+  <title>ひらがなチェック</title>
+  {% endif %}
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <a class="navbar-brand mr-4" href="/">ひらがなチェック</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+        aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarToggle">
+        <div class="navbar-nav mr-auto">
+        </div>
+        <div class="navbar-nav" align="right">
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main role="main" class="container">
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+    {% if 'Please' in message %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% else %}
+    <div class="{{ category }}">{{ message }}</div>
+    {% endif %}
+    {% endfor %}
+
+    {% block content %}
+    <!--ここにそれぞれの画面の記述が反映される-->
+    {% endblock %}
+    {% block footer %}
+    <footer class="footer fixed-bottom">
+      &copy; Copyright 2020 TeamI by Furuakwa
+    </footer>
+    {% endblock %}
+  </main>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>
