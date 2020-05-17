@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-10">
+
+    <h3>結果画面</h3>
+    <table class="table table-sm">
+      <tr>
+        <th>内容</th>
+        <th>文字</th>
+      </tr>
+      <tr>
+        <td>選択した文字</td>
+        <td>
+          <h1>{{input_value}}</h1>
+        </td>
+      </tr>
+      <tr>
+        <td>判断された文字</td>
+        <td>
+          <h1>{{result}}</h1>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+{% endblock %}
