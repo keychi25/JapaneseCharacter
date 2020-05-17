@@ -12,7 +12,8 @@ from keras.models import Sequential
 from keras.utils import np_utils
 from PIL import Image
 import numpy as np
-from flask import Flask, Blueprint, render_template, request, abort, flash
+import pandas as pd
+from flask import Flask, Blueprint, render_template, request, abort, flash, redirect, url_for
 from datetime import datetime
 from flask_cors import CORS
 
@@ -55,7 +56,7 @@ def run():
             return abort, 404
         if not lowerReg.match(j_character):
             flash('ひらがなを入力してください．', category='alert alert-danger')
-            return render_template('index.html')
+            return redirect(url_for('index'))
 
         if file:
             filename = secure_filename(file.filename)  # ファイル名
@@ -64,21 +65,26 @@ def run():
                                        filename))
         img = cv2.imread(os.path.join(tmp_dir,
                                       filename), 0)
-        X_test = np.array(Image.fromarray(img).resize((img_rows, img_cols), 1))
-        X_test = X_test.reshape(1, img_rows, img_cols, 1)
+        _, thresh3 = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
+        X_test = np.array(Image.fromarray(cv2.bitwise_not(thresh3)).resize(
+            (img_rows, img_cols), 1), dtype=np.float32)
+        X_test = X_test.astype("float32") / 255
+        X_test = X_test.reshape(1, img_rows, img_cols,
+                                1)
+        os.remove(os.path.join(tmp_dir,
+                               filename))
         y_test.append(0)
         y_test = np_utils.to_categorical(y_test, nb_classes)
         y_test = np.array(y_test)
         model = pickle.load(open("model/model_V1.sav", 'rb'))
-        model.compile(loss='categorical_crossentropy',
-                      optimizer='adadelta', metrics=['accuracy'])
         score = model.predict_proba(X_test)
-        print(score)
-        os.remove(os.path.join(tmp_dir,
-                               filename))
-        return render_template('index.html')
+        classmapping = pd.read_csv(
+            'classmapping.csv', usecols=['ひらがな'], encoding='cp932')
+        max_index = np.argmax(score[0])
+        print('画像のひらがなは「{}」です'.format(classmapping.iloc[max_index].ひらがな))
+        return render_template('result.html', input_value=j_character, result=classmapping.iloc[max_index].ひらがな)
     else:
-        return render_template('index.html')
+        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
