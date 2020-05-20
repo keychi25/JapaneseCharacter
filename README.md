@@ -1,9 +1,19 @@
 # 人工知概論・ひらがな判定器
 
 # 実行方法
+- 依存関係の設定
+```
+pipenv install -r requirements.txt
+```
 
+- pyhton3(3.7)での実行
 ```
 python3 app.py
+```
+
+- docker-composeで実行
+```
+docker-compose up --build
 ```
 
 # 参考サイト

@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+
+  flask:
+    container_name: dev_flask
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    working_dir: /code
+    volumes:
+      - .:/code:cached
+    ports:
+      - 5000:5000
+    tty: true
+    command: python3 app.py runserver 0.0.0.0:5000
