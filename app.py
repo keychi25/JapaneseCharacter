@@ -80,9 +80,21 @@ def run():
         score = model.predict_proba(X_test)
         classmapping = pd.read_csv(
             'classmapping.csv', usecols=['ひらがな'], encoding='cp932')
-        max_index = np.argmax(score[0])
-        print('画像のひらがなは「{}」です'.format(classmapping.iloc[max_index].ひらがな))
-        return render_template('result.html', input_value=j_character, result=classmapping.iloc[max_index].ひらがな)
+        result_rank = []
+        tmp = list(score[0])
+        score = list(score[0])
+        print(score)
+        for _ in range(10):
+            max_value = max(tmp)
+            max_index = score.index(max_value)
+            print(max_index)
+            result_rank.append(
+                {"result": classmapping.iloc[max_index].ひらがな,
+                 "score": '{:.5%}'.format(max(tmp))}
+            )
+
+            tmp.remove(max(tmp))
+        return render_template('result.html', input_value=j_character, result=result_rank)
     else:
         return redirect(url_for('index'))
 
