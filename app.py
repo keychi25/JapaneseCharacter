@@ -16,7 +16,7 @@ import pandas as pd
 from flask import Flask, Blueprint, render_template, request, abort, flash, redirect, url_for
 from datetime import datetime
 from flask_cors import CORS
-
+from trimming import run_trimming
 
 app = Flask(__name__)
 app.secret_key = 'hiragana-app'
@@ -63,10 +63,19 @@ def run():
             if os.path.exists(tmp_dir):
                 file.save(os.path.join(tmp_dir,
                                        filename))
+        im = Image.open(os.path.join(tmp_dir, filename))
+        im.show()
         img = cv2.imread(os.path.join(tmp_dir,
                                       filename), 0)
         _, thresh3 = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
-        X_test = np.array(Image.fromarray(cv2.bitwise_not(thresh3)).resize(
+        Image.fromarray(thresh3).save(os.path.join(tmp_dir,
+                                                   filename))
+        run_trimming(Image.open(os.path.join(tmp_dir, filename)), filename)
+        im = Image.open(os.path.join(tmp_dir, filename))
+        im.show()
+        run_img = cv2.imread(os.path.join(tmp_dir,
+                                          filename), 0)
+        X_test = np.array(Image.fromarray(cv2.bitwise_not(run_img)).resize(
             (img_rows, img_cols), 1), dtype=np.float32)
         X_test = X_test.astype("float32") / 255
         X_test = X_test.reshape(1, img_rows, img_cols,
@@ -76,7 +85,7 @@ def run():
         y_test.append(0)
         y_test = np_utils.to_categorical(y_test, nb_classes)
         y_test = np.array(y_test)
-        model = pickle.load(open("model/model_V1.sav", 'rb'))
+        model = pickle.load(open("model/model_V2.sav", 'rb'))
         score = model.predict_proba(X_test)
         classmapping = pd.read_csv(
             'classmapping.csv', usecols=['ひらがな'], encoding='cp932')
