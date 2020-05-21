@@ -50,4 +50,5 @@ docker-compose up --build
 [kerasのSequentialモデル](https://keras.io/ja/getting-started/sequential-model-guide/)  
 [kerasのオプティマイザ(最適化アルゴリズム)の利用方法](https://keras.io/ja/optimizers/)  
 [etlcdb(ひらがなのデータセット)](http://etlcdb.db.aist.go.jp/?lang=ja)  
+[OpenCVのサイト](http://labs.eecs.tottori-u.ac.jp/sd/Member/oyamada/OpenCV/html/py_tutorials/py_core/py_basic_ops/py_basic_ops.html)  
 [参照論文](https://pdfs.semanticscholar.org/f3ee/6bfaec669a2c8d087e2f11fa48aa7b45d6ea.pdf?_ga=2.15362358.1247571733.1589733184-821604392.1589733184)  
